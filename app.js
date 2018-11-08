@@ -68,7 +68,7 @@ function github(target, context, params) {
 
 // Shoutout (Needs to pass arg for username)
 function so(target, context, params) {
-    client.say(target, `Hey everyone, go check out ${context.username} at http://www.twitch.tv/${context.username} and show them some love!`)
+    client.say(target, `Hey everyone, go check out ${params[0]} at http://www.twitch.tv/${params[0]} and show them some love!`)
 
     console.log(client.getUsername());
 }
