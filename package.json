@@ -1,0 +1,22 @@
+{
+  "name": "twitchbot",
+  "version": "1.0.0",
+  "description": "Twitch chatbot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rumblecollective/twitchbot.git"
+  },
+  "author": "Tony Rumble",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rumblecollective/twitchbot/issues"
+  },
+  "homepage": "https://github.com/rumblecollective/twitchbot#readme",
+  "dependencies": {
+    "tmi.js": "^1.2.1"
+  }
+}
