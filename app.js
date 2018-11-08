@@ -44,7 +44,12 @@ let knownCommands = { cmd, project, so, github }
 
 // !cmd (Commands)
 function cmd(target, context, params) {
-    client.say(target, "!project !discord !sub !github !github");
+    // Dynamic output of knownCommands
+    var msg = "";//
+    for (o in knownCommands) {
+        msg = msg + "!" + o + " ";
+    }
+    client.say(target, msg);
 }
 
 // function sub(target, context, params client.say(target,)) {
@@ -61,11 +66,10 @@ function github(target, context, params) {
     client.say(target, "You can visit our community github profile at https://github.com/rumblecollective");
 }
 
-// Shoutout (Needs to pass arg for username)
+// Shoutout
 function so(target, context, params) {
-    client.say(target, `Hey everyone, go check out ${context.username} at http://www.twitch.tv/${context.username} and show them some love!`)
-
-    console.log(client.getUsername());
+    if(context.mod === true || context.badges.broadcaster === '1' )
+        client.say(target, `Hey everyone, go check out ${params[0]} at http://www.twitch.tv/${params[0]} and show them some love!`)
 }
 
 // Timed messages (Put in a separate file)
