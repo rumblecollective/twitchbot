@@ -44,7 +44,12 @@ let knownCommands = { cmd, project, so, github }
 
 // !cmd (Commands)
 function cmd(target, context, params) {
-    client.say(target, "!project !discord !sub !github !github");
+    // Dynamic output of knownCommands
+    var msg = "";//
+    for (o in knownCommands) {
+        msg = msg + "!" + o + " ";
+    }
+    client.say(target, msg);
 }
 
 // function sub(target, context, params client.say(target,)) {
