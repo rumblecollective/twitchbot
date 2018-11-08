@@ -38,12 +38,45 @@ client.on('disconnected', onDisconnectedHandler)
 // Connect to the chat
 client.connect();
 
-let knownCommands = { cmd }
+// 
+// Known commands - Put this in a separate file!
+let knownCommands = { cmd, project, so, github }
 
-// Commands
+// !cmd (Commands)
 function cmd(target, context, params) {
-    client.say(target, "!project !discord !sub !twitter !github");
+    client.say(target, "!project !discord !sub !github !github");
 }
+
+// function sub(target, context, params client.say(target,)) {
+//     client.say(target, "")
+// }
+
+// !project
+function project(target, context, params) {
+    client.say(target, "Today we are working on building a community Twitch chat bot in Node.js");
+}
+
+// !github
+function github(target, context, params) {
+    client.say(target, "You can visit our community github profile at https://github.com/rumblecollective");
+}
+
+// Shoutout (Needs to pass arg for username)
+function so(target, context, params) {
+    client.say(target, `Hey everyone, go check out ${context.username} at http://www.twitch.tv/${context.username} and show them some love!`)
+
+    console.log(client.getUsername());
+}
+
+// Timed messages (Put in a separate file)
+// client.on("logon", function () {
+//     setInterval(messageFunction, 100000);
+// });
+
+// function messageFunction()
+// {
+// 	client.say("tonyrumble", "test");
+// };
 
 // Called every time a message comes in:
 function onMessageHandler (target, context, msg, self) {

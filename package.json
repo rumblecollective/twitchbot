@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/rumblecollective/twitchbot#readme",
   "dependencies": {
+    "node-env-file": "^0.1.8",
+    "play-sound": "^1.1.2",
     "tmi.js": "^1.2.1"
   }
 }
