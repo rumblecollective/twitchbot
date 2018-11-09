@@ -1,8 +1,6 @@
 var tmi = require('tmi.js');
 var env = require('node-env-file');
-// var player = require('play-sound')(opts = {
-
-// })
+var player = require('play-sound')(opts = {});
 
 // Load environment variables
 env(__dirname + '/.env');
@@ -40,7 +38,7 @@ client.connect();
 
 // 
 // Known commands - Put this in a separate file!
-let knownCommands = { cmd, project, so, github }
+let knownCommands = { cmd, project, so, github, bnet, steam }
 
 // !cmd (Commands)
 function cmd(target, context, params) {
@@ -66,21 +64,43 @@ function github(target, context, params) {
     client.say(target, "You can visit our community github profile at https://github.com/rumblecollective");
 }
 
+// !bnet
+function steam(target, context, params) {
+    client.say(target, "Steam ID: tony_rumble");
+}
+
+// !steam
+function bnet(target, context, params) {
+    client.say(target, "bnet: TonyRumble#1788");
+}
+
 // Shoutout
 function so(target, context, params) {
     if(context.mod === true || context.badges.broadcaster === '1' )
         client.say(target, `Hey everyone, go check out ${params[0]} at http://www.twitch.tv/${params[0]} and show them some love!`)
 }
 
-// Timed messages (Put in a separate file)
-// client.on("logon", function () {
-//     setInterval(messageFunction, 100000);
-// });
+// Sound fx
+function rekt(target, context, params) {
+    client.on(target, player.play('wilhemscream.mp3', { afplay: ['-v', 1 ] }, function(err){
+        if (err) throw err
+        console.log("test");
+      }));
+    }
+      // player.play('foo.mp3', { timeout: 300 }, function(err){
+//     if (err) throw err
+//   })
 
-// function messageFunction()
-// {
-// 	client.say("tonyrumble", "test");
-// };
+
+// Timed messages (Put in a separate file)
+client.on("logon", function () {
+    setInterval(messageFunction, 2400000);
+});
+
+function messageFunction()
+{
+	client.say("tonyrumble", "If you enjoy the Next Level Streamwave, consider subscribing to the channel to recieve exclusive access to previous broadcasts, SSH access to our community Github, dank sub emotes and badges! More support = more streams!");
+};
 
 // Called every time a message comes in:
 function onMessageHandler (target, context, msg, self) {
