@@ -1,15 +1,18 @@
-var tmi = require('tmi.js');
-var env = require('node-env-file');
-var player = require('play-sound')(opts = {});
+const tmi = require('tmi.js');
+const env = require('node-env-file');
+const static = require('./modules/static');
+const timed = require('./modules/timed');
+const active = require('./modules/active');
+// const player = require('play-sound')(opts = {});
 
-// Load environment variables
+// Load environment letiables
 env(__dirname + '/.env');
 
 // Set command prefix
-var commandPrefix = '!'
+let commandPrefix = '!'
 
 // Define config options
-var options = {
+let options = {
     options: {
         debug: true
     },
@@ -37,79 +40,18 @@ client.on('disconnected', onDisconnectedHandler)
 client.connect();
 
 // 
-// Known commands - Put this in a separate file!
-let knownCommands = { cmd, project, so, github, bnet, steam }
-
-// !cmd (Commands)
-function cmd(target, context, params) {
-    // Dynamic output of knownCommands
-    var msg = "";//
-    for (o in knownCommands) {
-        msg = msg + "!" + o + " ";
-    }
-    client.say(target, msg);
-}
-
-// function sub(target, context, params client.say(target,)) {
-//     client.say(target, "")
-// }
-
-// !project
-function project(target, context, params) {
-    client.say(target, "Today we are working on building a community Twitch chat bot in Node.js");
-}
-
-// !github
-function github(target, context, params) {
-    client.say(target, "You can visit our community github profile at https://github.com/rumblecollective");
-}
-
-// !bnet
-function steam(target, context, params) {
-    client.say(target, "Steam ID: tony_rumble");
-}
-
-// !steam
-function bnet(target, context, params) {
-    client.say(target, "bnet: TonyRumble#1788");
-}
-
-// Shoutout
-function so(target, context, params) {
-    if(context.mod === true || context.badges.broadcaster === '1' )
-        client.say(target, `Hey everyone, go check out ${params[0]} at http://www.twitch.tv/${params[0]} and show them some love!`)
-}
-
-// Sound fx
-function rekt(target, context, params) {
-    client.on(target, player.play('wilhemscream.mp3', { afplay: ['-v', 1 ] }, function(err){
-        if (err) throw err
-        console.log("test");
-      }));
-    }
-      // player.play('foo.mp3', { timeout: 300 }, function(err){
-//     if (err) throw err
-//   })
-
-
-// Timed messages (Put in a separate file)
-client.on("logon", function () {
-    setInterval(messageFunction, 2400000);
-});
-
-function messageFunction()
-{
-	client.say("tonyrumble", "If you enjoy the Next Level Streamwave, consider subscribing to the channel to recieve exclusive access to previous broadcasts, SSH access to our community Github, dank sub emotes and badges! More support = more streams!");
-};
 
 // Called every time a message comes in:
 function onMessageHandler (target, context, msg, self) {
 
+    console.log(msg);
+
     if (self) { return } // Ignore messages from the bot
+
     // This isn't a command since it has no prefix:
-    if (msg.substr(0, 1) !== commandPrefix) {
-      //console.log(`[${target} (${context['message-type']})] ${context.username}: ${msg}`)
-      return
+    if (msg.indexOf(commandPrefix) === -1) {
+    console.log(`[${target} (${context['message-type']})] ${context.username}: ${msg}`)
+    return
     }
   
     // Split the message into individual words:
@@ -120,23 +62,24 @@ function onMessageHandler (target, context, msg, self) {
     const params = parse.splice(1)
   
     // If the command is known, let's execute it:
-    if (commandName in knownCommands) {
+    if (commandName in static.knownCommands) {
       // Retrieve the function by its name:
-      const command = knownCommands[commandName]
+      const command = static.knownCommands[commandName]
+
       // Then call the command with parameters:
-      command(target, context, params)
+      command(client, target, params, context)
       //console.log(`* Executed ${commandName} command for ${context.username}`)
     } else {
-      //console.log(`* Unknown command ${commandName} from ${context.username}`)
+      console.log(`* Unknown command ${commandName} from ${context.username}`)
     }
-  }
+}
   // Called every time the bot connects to Twitch chat:
 function onConnectedHandler (addr, port) {
-    //console.log(`* Connected to ${addr}:${port}`)
-  }
+    console.log(`* Connected to ${addr}:${port}`)
+}
   
-  // Called every time the bot disconnects from Twitch:
-  function onDisconnectedHandler (reason) {
-    //console.log(`Disconnected: ${reason}`)
-    //process.exit(1)
-  }
+// Called every time the bot disconnects from Twitch:
+function onDisconnectedHandler (reason) {
+console.log(`Disconnected: ${reason}`)
+process.exit(1)
+}
