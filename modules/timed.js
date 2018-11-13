@@ -3,7 +3,7 @@ module.exports = {
     // setIneterval on messageFunction
     timedFunction: function() {
         client.on("logon", function () {
-            setInterval(messageFunction, 100);
+            setInterval(messageFunction, 10000);
         });
     },
 

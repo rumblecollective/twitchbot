@@ -39,21 +39,24 @@ client.on('disconnected', onDisconnectedHandler)
 // Connect to the chat
 client.connect();
 
-// 
+// List of modules
+let modules = {
+    staticModule: static.knownCommands,
+    activeModule: active.knownCommands,
+    timedModule: timed.messageFunction
+}
 
 // Called every time a message comes in:
 function onMessageHandler (target, context, msg, self) {
 
-    console.log(msg);
-
     if (self) { return } // Ignore messages from the bot
 
     // This isn't a command since it has no prefix:
-    if (msg.indexOf(commandPrefix) === -1) {
+    if (msg.indexOf(commandPrefix) !== 0) {
     console.log(`[${target} (${context['message-type']})] ${context.username}: ${msg}`)
     return
     }
-  
+    
     // Split the message into individual words:
     const parse = msg.slice(1).split(' ')
     // The command name is the first (0th) one:
@@ -62,24 +65,27 @@ function onMessageHandler (target, context, msg, self) {
     const params = parse.splice(1)
   
     // If the command is known, let's execute it:
-    if (commandName in static.knownCommands) {
-      // Retrieve the function by its name:
-      const command = static.knownCommands[commandName]
-
-      // Then call the command with parameters:
-      command(client, target, params, context)
-      //console.log(`* Executed ${commandName} command for ${context.username}`)
-    } else {
-      console.log(`* Unknown command ${commandName} from ${context.username}`)
+    for (let i = 0; i < Object.values(modules).length; i++) {
+        if (commandName in Object.values(modules)[i]) {
+            // Retrieve the function by its name:
+            const command = Object.values(modules)[i][commandName]
+      
+            // Then call the command with parameters:
+            command(client, target, params, context)
+            //console.log(`* Executed ${commandName} command for ${context.username}`)
+          } else {
+            console.log(`* Unknown command ${commandName} from ${context.username}`)
+          }
     }
 }
-  // Called every time the bot connects to Twitch chat:
+
+// Called every time the bot connects to Twitch chat:
 function onConnectedHandler (addr, port) {
     console.log(`* Connected to ${addr}:${port}`)
 }
   
 // Called every time the bot disconnects from Twitch:
 function onDisconnectedHandler (reason) {
-console.log(`Disconnected: ${reason}`)
+    console.log(`Disconnected: ${reason}`)
 process.exit(1)
 }

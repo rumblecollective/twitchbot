@@ -3,10 +3,6 @@
 ##Things to do
 
 - Put functions inside object literals
-- Refactor onMessageHandler
-    - Multiple modules need to be accessed 
-    - e.g. line 63 of app.js, only one module is being called 
-- Get timed messages working
 - Shoutout command needs error handling in case theres a typo or user does not exist
     https://dev.twitch.tv/docs/v5/reference/users/
         if 200
@@ -26,5 +22,34 @@
     -we will need a randomizer script for node
 - We want to make the bot as user friendly as possible so that a non-developer wouldn't have much trouble running it.
 
+# onMessageHandler
+let modules = {
+  staticModule: static.knownCommands,
+  activeModule: active.knownCommands,
+  timedModule: timed.knownCommands,
+  getCommand: function(command) {
+    // Get list of our module objects
+    let objs = Object.values(this).slice(0, -1);
+    // Initiate the command variable with null
+    let c = null;
+    // Iterate over each object
+    objs.forEach(obj => {
+      // Iterate over each key in the object
+    	for (let key in obj) {
+        // if our key is in our obj
+      if (key === command) {f
+        // set our c variable to the value
+      c = obj[key]
+      }
+      }})
+      // Returns the command or null value if no command is found.
+     return c
+   }
+}
+modules.getCommand(commandName)
+
+- Check to make sure that modules.getCommand returns something other than null
+- Pass the arguments to the returned function
+- Can replace the for loops with Object.values(modules).map()
 
 # Static commands

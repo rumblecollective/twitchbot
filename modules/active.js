@@ -6,7 +6,7 @@ module.exports = {
          client.say(target, "Today we refactoring and learning some object-oriented programming while building a Twitch chat bot in Node.js");
         },
     },
-    
+
     // Identifies that a command was used
     activeCommand: function(msg) {
         return(target, context, params) => {
